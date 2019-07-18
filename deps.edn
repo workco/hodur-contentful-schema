@@ -2,7 +2,8 @@
 
  :deps
  {org.clojure/clojure {:mvn/version "1.9.0"}
-  hodur/engine        {:mvn/version "0.1.4"}
+  workco/hodur-engine {:git/url "https://github.com/workco/hodur-engine.git"
+                       :sha "b58548c711214665b7c89bffc10028aad5451b63"}
   camel-snake-kebab   {:mvn/version "0.4.0"}
   datascript          {:mvn/version "0.16.7"}
   cheshire            {:mvn/version "5.8.1"}}
