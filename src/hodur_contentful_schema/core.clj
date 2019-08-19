@@ -178,9 +178,12 @@
     "assetLinksEditor"))
 
 (defmethod get-field-widget "Entry" [field]
-  (if (= :one (field-card-type field))
-    "entryLinkEditor"
-    "entryLinksEditor"))
+  (if-let [widget-id (:contentful/widget-id field)]
+    widget-id
+    (if (= :one (field-card-type field))
+      "entryLinkEditor"
+      "entryLinksEditor")))
+
 
 (defmethod get-field-widget :default [{:keys [contentful/widget-id]}] widget-id)
 
