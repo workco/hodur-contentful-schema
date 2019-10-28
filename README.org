@@ -476,7 +476,7 @@ $ npx contentful-cli space import --config contentful-config.json --content-file
 
 * Bugs
 
-  If you find a bug, submit a [[https://github.com/luchiniatwork/hodur-contentful-schema/issues][GitHub issue]].
+  + Known [[https://github.com/workco/hodur-contentful-schema/issues/2][schema bug]]
 
 * Help!
 
