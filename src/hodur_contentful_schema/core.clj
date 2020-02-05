@@ -212,46 +212,52 @@
   (boolean disabled))
 
 (defn ^:private parse-content-type-field [{:keys [field/camelCaseName
+                                                  contentful/tag
                                                   field/optional] :as field}]
-  (cond-> {:id (name camelCaseName)
-           :name (display-name field)
-           :type (get-type-definition field)
-           :localized false
-           :required (not optional)
-           :validations (get-field-validations field)
-           :omitted (omitted-field? field)
-           :disabled (disabled-field? field)}
+  (when tag
+    (cond-> {:id (name camelCaseName)
+             :name (display-name field)
+             :type (get-type-definition field)
+             :localized false
+             :required (not optional)
+             :validations (get-field-validations field)
+             :omitted (omitted-field? field)
+             :disabled (disabled-field? field)}
 
-    (and (is-field-user-entity? field)
-         (= :one (field-card-type field))
-         (not (is-field-enum-entity? field)))
-    (assoc :link-type "Entry")
+      (and (is-field-user-entity? field)
+           (= :one (field-card-type field))
+           (not (is-field-enum-entity? field)))
+      (assoc :link-type "Entry")
 
-    (and (= "Asset" (base-spec-field-type field))
-         (= :one (field-card-type field)))
-    (assoc :link-type "Asset")
+      (and (= "Asset" (base-spec-field-type field))
+           (= :one (field-card-type field)))
+      (assoc :link-type "Asset")
     
-    (= :many (field-card-type field))
-    (assoc :items (get-type-many field))))
+      (= :many (field-card-type field))
+      (assoc :items (get-type-many field)))))
 
-(defn ^:private parse-editor-field [{:keys [field/camelCaseName] :as field}]
-  (cond-> {:field-id (name camelCaseName)
-           :widget-id (get-field-widget field)}
+(defn ^:private parse-editor-field [{:keys [field/camelCaseName
+                                            contentful/tag] :as field}]
+  (when tag
+    (cond-> {:field-id (name camelCaseName)
+             :widget-id (get-field-widget field)}
 
-    (has-editor-settings? field)
-    (assoc :settings (get-editor-settings field))))
+      (has-editor-settings? field)
+      (assoc :settings (get-editor-settings field)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn ^:private parse-content-type-fields [fields]
-  (reduce (fn [c field]
-            (conj c (parse-content-type-field field)))
-          [] fields))
+  (->> (reduce (fn [c field]
+                 (conj c (parse-content-type-field field)))
+               [] fields)
+       (remove nil?)))
 
 (defn ^:private parse-editor-fields [fields]
-  (reduce (fn [c field]
-            (conj c (parse-editor-field field)))
-          [] fields))
+  (->> (reduce (fn [c field]
+                 (conj c (parse-editor-field field)))
+               [] fields)
+       (remove nil?)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

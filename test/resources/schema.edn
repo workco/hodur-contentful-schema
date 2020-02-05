@@ -17,7 +17,7 @@
     :cardinality [0 n]
     :contentful/widget-id "listInput"}
   many-short-texts-field
-  
+
   ^{:type String
     :contentful/widget-id "slugEditor"}
   short-text-widget-field
@@ -45,7 +45,7 @@
   ^{:type DateTime
     :contentful/format "dateonly"}
   date-only-field
-  
+
   ^{:type DateTime
     :contentful/format "time"}
   time-field
@@ -179,6 +179,6 @@
                              {:asset-file-size {:min 1048576
                                                 :max 8388608}
                               :message "File must be between 1048576B and 8388608B"}]}
-  multiple-asset-validations-field]
+  multiple-asset-validations-field]]
 
- ]
+
