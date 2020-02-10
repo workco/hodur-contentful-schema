@@ -109,8 +109,8 @@
     :otherwise
     []))
 
-(defn ^:private get-field-validations [{:keys [contentful/validations] :as field}]
-  (concat (get-base-validations field) validations))
+(defn ^:private get-field-validations [field]
+  (get-base-validations field))
 
 (defn ^:private get-type-many [field]
   (cond
