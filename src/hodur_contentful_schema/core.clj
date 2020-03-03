@@ -112,6 +112,17 @@
 (defn ^:private get-field-validations [{:keys [contentful/validations] :as field}]
   (concat (get-base-validations field) validations))
 
+(defn ^:private validate-parent-field
+  [{:keys [contentful/validations field/cardinality] :as field}]
+  (letfn [(build-cardinality []
+            (let [min (first cardinality)
+                  max (second cardinality)]
+              [{:size (cond-> {:min min}
+                              (number? max) (assoc :max max))}]))]
+    (if (= :many (field-card-type field))
+      (build-cardinality)
+      (get-field-validations field))))
+
 (defn ^:private get-type-many [field]
   (cond
     (is-field-user-entity? field)
@@ -220,7 +231,7 @@
              :type (get-type-definition field)
              :localized false
              :required (not optional)
-             :validations (get-field-validations field)
+             :validations (validate-parent-field field)
              :omitted (omitted-field? field)
              :disabled (disabled-field? field)}
 
